@@ -3,8 +3,9 @@
 
 This project keeps its memory in `.carnet/`. Read before working, write through the tool.
 
-- **State**: `.carnet/ETAT.md` is what is true now. Rewrite it at close with `carnet etat <file>`;
-  it is refused above its size budget. Never append history to it.
+- **State**: `.carnet/ETAT.md` holds the heading, what is blocked and the commitments, with links
+  to tickets, whose own state lives in the ticket tool. Rewrite it at close with
+  `carnet etat <file>`; it is refused above its size budget. Never append history to it.
 - **Journal**: `carnet noter "<one line>"` adds a dated line to `.carnet/journal/`. The tool sets
   the date and time; never type them.
 - **Errors**: when a result, a message or a method is corrected, note it with the
