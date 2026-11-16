@@ -1,0 +1,14 @@
+{
+  "name": "carnet",
+  "description": "The carnet project notebook: state, journal, error journal and guards for work with AI agents.",
+  "owner": {
+    "name": "Firas Jday"
+  },
+  "plugins": [
+    {
+      "name": "carnet",
+      "source": "./",
+      "description": "Project notebook: bounded state loaded at session start, journal, private error journal with thresholds, guards."
+    }
+  ]
+}

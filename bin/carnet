@@ -1,0 +1,3 @@
+#!/bin/sh
+# Shim so that `carnet` works wherever the plugin's bin/ is on PATH.
+exec node "$(dirname "$0")/carnet.mjs" "$@"

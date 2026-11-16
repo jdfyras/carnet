@@ -1,0 +1,23 @@
+{
+  "name": "carnet",
+  "version": "0.1.0",
+  "description": "A project notebook for work with AI agents: a bounded state file loaded at session start, a journal, a private error journal whose counts decide when a rule or a check is due, and guards.",
+  "author": {
+    "name": "Firas Jday"
+  },
+  "license": "MIT",
+  "userConfig": {
+    "gardes": {
+      "type": "string",
+      "title": "Guards mode",
+      "description": "avertir: a guard adds a warning the agent sees and blocks nothing. bloquer: a guard refuses the action. The secrets guard always blocks.",
+      "default": "avertir"
+    },
+    "fuseau": {
+      "type": "string",
+      "title": "Time zone",
+      "description": "IANA name such as Europe/Paris, used when a project does not set one. Empty: the machine's zone.",
+      "default": ""
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# Scripts run under bash and node on three systems: LF everywhere.
+*.sh text eol=lf
+*.mjs text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+bin/carnet text eol=lf
+bin/carnet.cmd text eol=crlf

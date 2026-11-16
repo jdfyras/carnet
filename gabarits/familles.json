@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "familles": [
+    { "nom": "affirmation-sans-source", "description": "A figure, a status or a date stated without a source read in the same session.", "variantes": ["unsourced-claim"], "regle_depuis": null, "forme": null },
+    { "nom": "preuve-non-rejouee", "description": "A proof declared (tests pass, it works) without re-running the command that shows it.", "variantes": ["proof-not-replayed"], "regle_depuis": null, "forme": null },
+    { "nom": "cause-sans-lecture", "description": "A cause written down without reading the log, the diff or the code that establishes it.", "variantes": ["cause-without-reading"], "regle_depuis": null, "forme": null },
+    { "nom": "absence-sans-temoin", "description": "\"Nothing\", \"absent\", \"never created\" concluded from a single search that could have missed it.", "variantes": ["absence-without-witness"], "regle_depuis": null, "forme": null },
+    { "nom": "supposition-non-verifiee", "description": "An assumption about a tool, an API or the user's environment acted upon without checking.", "variantes": ["unverified-assumption"], "regle_depuis": null, "forme": null },
+    { "nom": "perimetre-avant-cadrage", "description": "Reading, writing or running outside the agreed scope, or launching work without bounding what it may touch.", "variantes": ["scope-before-framing"], "regle_depuis": null, "forme": null },
+    { "nom": "commande-destructive", "description": "A command that erased or overwrote work that was not saved.", "variantes": ["destructive-command"], "regle_depuis": null, "forme": null },
+    { "nom": "secret-affiche", "description": "A secret value printed in a tool output, a log or a message.", "variantes": ["secret-shown"], "regle_depuis": null, "forme": null },
+    { "nom": "tache-de-fond", "description": "A background task believed stopped that kept running, or was never awaited.", "variantes": ["background-task"], "regle_depuis": null, "forme": null },
+    { "nom": "heure-fuseau", "description": "A time typed from memory or in the wrong zone instead of read from a tool.", "variantes": ["time-zone"], "regle_depuis": null, "forme": null },
+    { "nom": "plan-non-relu", "description": "A step executed without rereading the plan, the decision or the instruction it came from.", "variantes": ["plan-not-reread"], "regle_depuis": null, "forme": null },
+    { "nom": "engagement-echeance", "description": "A commitment made to someone and not recorded, or recorded and not followed.", "variantes": ["commitment-deadline"], "regle_depuis": null, "forme": null },
+    { "nom": "executants-concurrents", "description": "Two sessions or agents acting on the same thing without knowing about each other.", "variantes": ["concurrent-workers"], "regle_depuis": null, "forme": null },
+    { "nom": "edition-echappements", "description": "A file with regexes, backslashes or non-ASCII text corrupted by a shell edit.", "variantes": ["escaping-edit"], "regle_depuis": null, "forme": null }
+  ]
+}

@@ -1,0 +1,5 @@
+.carnet.local/
+node_modules/
+*.propose
+results/
+*.local.md
