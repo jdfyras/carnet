@@ -11,6 +11,12 @@ a rule. This skill keeps the label inside a closed list and lets the counts deci
 Answer in the user's language. The entry is private: it stays in `.carnet.local/`, which git
 ignores. What is shared with the team is the lesson, not the fault.
 
+## 0. No notebook, no entry
+
+If the project has no `.carnet/` folder, say so and offer to set it up with `carnet-init`. Do not
+write the entry anywhere else, and do not guess a family, not even "probably something like…":
+the list is in the project, and a guessed label is exactly what this skill exists to prevent.
+
 ## 1. Establish the facts at their source
 
 Reread what shows the error (the message, the output, the file, the diff) before writing. For the
