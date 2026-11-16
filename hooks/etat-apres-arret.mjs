@@ -8,6 +8,7 @@
 //
 // Known limits, stated rather than hidden:
 //   - recognition by vocabulary (English and French): an unlisted phrasing passes;
+//   - "still open" counts only with a pull request named in the same sentence;
 //   - any process listing or PR read in the reply satisfies the check, even on another subject;
 //   - stop_hook_active true: the hook lets go, so it can never loop.
 
@@ -21,12 +22,17 @@ export const RE_PROCESSUS = new RegExp([
   '(?:script|tâche|processus|process|task|job|watcher|loop)[^.\\n]{0,60}?(?:arrêtée?s?|coupée?s?|tuée?s?|stoppée?s?|killed|stopped|terminated)',
   '(?:arrêtée?s?|coupée?s?|tuée?s?|stoppée?s?|killed|stopped|terminated)[^.\\n]{0,40}?(?:script|tâche|processus|process|task|job)',
 ].join('|'), 'i');
+// "Still open" alone is not about a pull request: a commitment, a question or a ticket is "still
+// open" too, and a brief that said so was flagged three times out of three in an eval (2026-11-16).
+// The open/ouverte forms need a pull request named in the same sentence; "merged" needs nothing.
+const PR = '(?:pull requests?|merge requests?|\\bPRs?\\b|#\\d+)';
+const OUVERTE = '(?:still open|(?:toujours|encore) ouverte)';
 export const RE_PR = new RegExp([
   "rien (?:n'a été |n’a été |n'est |n’est |ne sera )?fusionné",
-  '(?:toujours|encore) ouverte',
   'pas (?:encore )?fusionnée',
   '(?:nothing|not yet|has not been|hasn\'t been|isn\'t|is not) merged',
-  'still open',
+  `${PR}[^.\\n]{0,80}?${OUVERTE}`,
+  `${OUVERTE}[^.\\n]{0,40}?${PR}`,
 ].join('|'), 'i');
 
 const LIT_PROCESSUS = /(?:^|[\s;&|(])ps(?:\s|$)|Get-Process|Get-CimInstance\s+Win32_Process|tasklist|pgrep/i;

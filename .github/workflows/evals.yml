@@ -50,15 +50,13 @@ jobs:
 
       - name: Run the eval suite
         run: |
+          # evals/lancer.sh evaluates a copy whose manifest declares no dependency: with the
+          # dependency declared, the eval never called a carnet skill (measured 2026-11-16).
           CASE="${{ inputs.case }}"
-          claude plugin eval . \
-            --trust-plugin \
-            --scaffold \
+          bash evals/lancer.sh \
             --allow-tools "Bash(carnet *)" \
             ${CASE:+--case "$CASE"} \
-            --json results.json \
             --threshold "${{ inputs.threshold }}" \
-            --no-publish \
             --max-cost-usd "${{ inputs.max_cost_usd }}"
 
       - name: Keep the results
@@ -66,7 +64,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: eval-results
-          path: |
-            results.json
-            evals/results/**
+          path: evals/results/**
           if-no-files-found: warn

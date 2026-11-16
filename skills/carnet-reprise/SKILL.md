@@ -20,6 +20,8 @@ Answer in the user's language. Do not start the work itself until the user has s
    open, the next seven days, and the lines whose date is only a weekday or "tomorrow". Read those
    last ones yourself; do not guess the day. The date comes from the tool, not from what you
    believe today is.
+   With no shell, read the commitments section yourself, compare each date with today's date as
+   your session gives it, and say which date you used.
 3. **Handover**: the most recent file in `.carnet/passations/`, if any. It was written for you.
 4. **Health**: run `carnet sante`. It lists budgets exceeded, an overdue review, and error
    families past a threshold.

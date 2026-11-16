@@ -3,6 +3,24 @@
 Dates are YYYY-MM-DD. This file follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 loosely and [semantic versioning](https://semver.org/).
 
+## [0.2.1] - 2026-11-16
+
+### Fixed
+
+- The stop guard flagged "still open" as a claim about a pull request whatever it was about. A
+  brief saying a commitment was "still open" was flagged in every run of an eval, and the user's
+  last message became a discussion of the guard instead of the brief. It now needs a pull request
+  named in the same sentence.
+- `carnet-reprise`: with no shell, it reads the commitments section itself and says which date it
+  compared against.
+
+### Added
+
+- `evals/lancer.sh` runs the suite on a copy of the plugin without its `dependencies` line. With
+  the line, `claude plugin eval` never called a carnet skill (0 of 9 runs; 3 of 3 without it, same
+  case). The cause is not established.
+- Eval case `reprise-deadlines-first`: 3 of 3 with the plugin, 1 of 3 without (2026-11-16, n=3).
+
 ## [0.2.0] - 2026-11-16
 
 ### Added

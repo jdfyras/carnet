@@ -177,6 +177,20 @@ test('after stop: as a process, warns by default, blocks on option, never loops'
   assert.equal(lancer('etat-apres-arret.mjs', { transcript_path: path.join(d, 'absent.jsonl') }).sortie, null, 'a missing transcript never breaks the stop');
 });
 
+test('after stop: "still open" is about a pull request only when one is named', () => {
+  for (const t of ['The PR is still open.', 'Pull request #12 is still open, waiting for review.', 'Still open: PR 41 and PR 42.',
+    'La PR #607 est toujours ouverte.', 'La pull request est encore ouverte côté relecture.', '#88 is still open.']) {
+    assert.match(apresArret([saisie, texte(t)]), /pull request's state without reading it/, t);
+  }
+  // Decoys: a commitment, a question, a ticket. None is a pull request.
+  for (const t of ['The audit report WREN-207 was due yesterday and is still open in the state file.', 'Two questions are still open.',
+    'La question du fuseau est toujours ouverte.', 'The ticket is still open. The PR was read and is merged.', 'Dated in the past and still open: 2 lines.',
+    'Still open in the file, not verified at the source.', 'The spring sale is still open, prices as before.']) {
+    assert.equal(apresArret([saisie, texte(t)]), null, t);
+  }
+  assert.equal(apresArret([saisie, outil('gh pr view 12 --json state'), texte('PR #12 is still open.')]), null);
+});
+
 // ---------------------------------------------------------------- session-start
 
 test('session start: prints the state and the alerts, nothing outside a project', () => {
