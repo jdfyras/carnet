@@ -1,0 +1,72 @@
+name: evals
+
+# Skill evals call a model and cost money, so they never run on push or on pull requests:
+# only by hand, from the Actions tab, with a cost ceiling. No secret is exposed to a fork.
+on:
+  workflow_dispatch:
+    inputs:
+      max_cost_usd:
+        description: Hard cost ceiling for the whole run, in USD
+        default: "5"
+      case:
+        description: Case name glob (empty for all cases)
+        default: ""
+      threshold:
+        description: Minimum score per case (0..1)
+        default: "0.8"
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refuse to start without credentials
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "Repository secret ANTHROPIC_API_KEY is not set: nothing was run." >&2
+            exit 1
+          fi
+
+      # The shell-enabled cases need a sandbox; on Linux it is bubblewrap and socat.
+      - name: Install the sandbox backend
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq bubblewrap socat
+
+      - name: Install Claude Code and put carnet on the PATH
+        run: |
+          npm install -g @anthropic-ai/claude-code@latest
+          npm link
+          claude --version
+          carnet aide | head -3
+
+      - name: Run the eval suite
+        run: |
+          CASE="${{ inputs.case }}"
+          claude plugin eval . \
+            --trust-plugin \
+            --scaffold \
+            --allow-tools "Bash(carnet *)" \
+            ${CASE:+--case "$CASE"} \
+            --json results.json \
+            --threshold "${{ inputs.threshold }}" \
+            --no-publish \
+            --max-cost-usd "${{ inputs.max_cost_usd }}"
+
+      - name: Keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            results.json
+            evals/results/**
+          if-no-files-found: warn
