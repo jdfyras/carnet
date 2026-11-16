@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: erreur-picks-from-the-closed-list
+context:
+  scaffold_script: fixture.sh

@@ -14,6 +14,10 @@ All commands below are the `carnet` tool. If the command is not found, tell the 
 on the PATH (the plugin does it for Claude Code; elsewhere, `npm link` in a clone of the carnet
 repository) and stop: do not recreate the files by hand.
 
+If you cannot run commands at all in this session, say so in two or three lines, give the one
+command to run (`carnet init`), and stop there. Do not ask the setup questions yet: they come after
+the simulation, because its plan changes what is worth asking.
+
 ## 1. Look, without writing
 
 Run `carnet init` with no option. It is a simulation: it prints what would be created, kept,

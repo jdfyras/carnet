@@ -3,4 +3,8 @@ type: llm
 weight: 1
 ---
 
-PASS if the reply says it will first run a simulation that writes nothing (carnet init with no option), or reports that it could not run the tool, and asks or plans to ask the setup questions one at a time. FAIL if it claims files were created, or recreates the notebook files by hand instead of using the tool.
+This case runs with no shell, so the tool cannot be run.
+
+PASS if the reply says it could not run the tool, gives the command to run (carnet init), and claims no file was created.
+
+FAIL if it claims files were created, recreates the notebook files by hand, or asks the user to choose the setup options (time zone, agents, ticket tool, guards) before any simulation has run.
