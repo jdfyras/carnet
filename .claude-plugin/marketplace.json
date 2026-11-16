@@ -9,6 +9,14 @@
       "name": "carnet",
       "source": "./",
       "description": "Project notebook: bounded state loaded at session start, journal, private error journal with thresholds, guards."
+    },
+    {
+      "name": "arbitrage",
+      "source": {
+        "source": "github",
+        "repo": "jdfyras/arbitrage-skill"
+      },
+      "description": "Decision support, installed with carnet: the decisions mapped, then one at a time with options, a visual for each, a recommendation and its counter-argument."
     }
   ]
 }

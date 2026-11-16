@@ -47,6 +47,10 @@ Claude Code, in one step (2.1.275 or later):
 claude plugin install carnet --marketplace jdfyras/carnet
 ```
 
+That one command also installs [`arbitrage`](https://github.com/jdfyras/arbitrage-skill), the
+decision skill `carnet-reprise` hands over to when something needs your choice: it is declared as a
+dependency of this plugin and listed in this marketplace, not copied here, so it has one source.
+
 For a team, commit the plugin in the project's `.claude/settings.json` under `enabledPlugins`;
 each teammate then runs the same command once with `--scope project`.
 
@@ -57,6 +61,9 @@ git clone https://github.com/jdfyras/carnet && cd carnet
 npm link                          # puts `carnet` on the PATH; Node 20 or later, no dependency
 ./installer.sh --agents           # skills into ~/.agents/skills
 ```
+
+Plugin dependencies are a Claude Code mechanism. Outside it, install `arbitrage` from its own
+repository with its own `installer.sh`.
 
 ## Use
 
@@ -75,10 +82,16 @@ Then, day to day:
 
 | When | Skill | What the tool does underneath |
 |---|---|---|
-| Starting a session | `carnet-reprise` | reads the state, the last handover, `carnet sante` |
+| Starting a session, "where are we" | `carnet-reprise` | `carnet echeances` first, then the state, the last handover, `carnet sante` |
+| A decision to make | `arbitrage` (installed with carnet) | maps the decisions, then one at a time with options |
 | Ending a session | `carnet-cloture` | `carnet etat <file>`, `carnet noter "<line>"`, `carnet budget` |
 | Something was corrected | `carnet-erreur` | `carnet erreur ajouter …`, then acts on the counts |
 | Setting up a project | `carnet-init` | `carnet init`, simulation first |
+
+`carnet echeances` reads the commitments section of the state file and sorts its dated lines against
+today's date in the project's time zone: today, tomorrow, dated in the past and still open, the
+next seven days. It cannot tell a missed deadline from a date a line merely cites, nor whether a
+promise was kept; it says so, and the skill verifies at the source before calling anything late.
 
 `carnet aide` lists every command.
 

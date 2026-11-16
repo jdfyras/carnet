@@ -1,11 +1,14 @@
 {
   "name": "carnet",
-  "version": "0.1.0",
-  "description": "A project notebook for work with AI agents: a bounded state file loaded at session start, a journal, a private error journal whose counts decide when a rule or a check is due, and guards.",
+  "version": "0.2.0",
+  "description": "A project notebook for work with AI agents: a bounded state file loaded at session start, deadlines read from it, a journal, a private error journal whose counts decide when a rule or a check is due, and guards. Installs the arbitrage decision skill with it.",
   "author": {
     "name": "Firas Jday"
   },
   "license": "MIT",
+  "dependencies": [
+    "arbitrage"
+  ],
   "userConfig": {
     "gardes": {
       "type": "string",

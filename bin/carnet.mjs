@@ -11,6 +11,7 @@ import { cheminEtat, ecrireEtat, noter } from '../lib/etat.mjs';
 import { ajouter, ajouterFamille, compter, lireFamilles, marquerRegle, rapportCompte } from '../lib/erreurs.mjs';
 import { enregistrer, marquerRevue, rapportSante, sante } from '../lib/sante.mjs';
 import { appliquer, planifier, rapportPlan, verifier } from '../lib/init.mjs';
+import { lire as lireEcheances, rapport as rapportEcheances } from '../lib/echeances.mjs';
 import { decouper, ecrire as ecrireDecoupage, rapport as rapportDecoupage } from '../lib/decouper.mjs';
 import { DEFAUTS } from '../lib/racine.mjs';
 
@@ -28,6 +29,8 @@ const AIDE = `carnet <command>
   erreur compter         counts per family and the action each threshold calls for
   erreur regle <f> [--forme "<what enforces it>"]   record that a family has a rule
   erreur famille <name> "<description>"             add a family (user's decision)
+  echeances [<file>] [--aujourdhui <YYYY-MM-DD>]
+                         deadlines read in the state file: today, tomorrow, overdue, next 7 days
   sante [--json]         budgets, overdue review, families past a threshold
   revue [--notes <file>] record that a review happened today
   decouper <file> --annee <YYYY> [--garder <n>] [--etat "Commitments,Questions"] [--sortie <new folder>]
@@ -141,6 +144,13 @@ function principal(argv) {
       }
       if (sous === 'famille') return console.log(`Family added: ${ajouterFamille(racine, args[0] ?? '', args.slice(1).join(' '))}.`);
       throw new ErreurCarnet(`Unknown: carnet erreur ${sous ?? ''}\n${AIDE}`);
+    }
+    case 'echeances': {
+      const fichier = o._[0] ?? cheminEtat(racine);
+      if (!fs.existsSync(fichier)) throw new ErreurCarnet(`${fichier}: no such file.`, 2);
+      const jour = typeof o.aujourdhui === 'string' ? o.aujourdhui : maintenant(fuseauEffectif(config)).date;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(jour)) throw new ErreurCarnet('--aujourdhui takes a date as YYYY-MM-DD.');
+      return console.log(rapportEcheances(lireEcheances(lireTexte(fichier), jour), fichier));
     }
     case 'sante': {
       const etat = sante(racine, config);
