@@ -3,6 +3,24 @@
 Dates are YYYY-MM-DD. This file follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 loosely and [semantic versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `carnet decouper`: splits an oversized, appended-to state file into a remainder and monthly
+  journal files. Simulation by default, never edits the source, refuses to overwrite, and checks
+  that the outputs hold exactly the input lines. `--etat` names sections whose dated bullets are
+  state (deadlines), `--garder` keeps the most recent entries of each section.
+- Eval cases for the four skills, including prepared projects (`fixture.sh`).
+
+### Changed
+
+- `carnet-init`: with no shell, it gives the command and stops; the setup questions come after
+  the simulation.
+- `carnet-erreur`: in a project with no notebook, it writes no entry and guesses no family.
+- The default `AGENTS.md` block no longer says the state file is "what is true now": it holds the
+  heading, what is blocked and the commitments, with links to tickets.
+
 ## [0.1.0] - 2026-11-16
 
 First version.

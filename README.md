@@ -82,6 +82,21 @@ Then, day to day:
 
 `carnet aide` lists every command.
 
+### Migrating an old state file
+
+A state file that was appended to for months is mostly dated entries: a journal stored in the wrong
+place. `decouper` separates the two and proves nothing was lost.
+
+```bash
+carnet decouper OLD-STATE.md --annee 2026                       # simulation: measures, writes nothing
+carnet decouper OLD-STATE.md --annee 2026 --etat "Commitments" --sortie ./split
+```
+
+It never edits the source. Every input line lands in exactly one output, and the tool compares the
+two sets of lines before reporting. Sections named with `--etat` keep their dated bullets: under
+"Commitments", a date is a deadline, not history. What it leaves is usually still above the state
+budget; trimming undated text is a person's judgement, and the report says by how much.
+
 ## What is measured, and what is not
 
 Measured: file sizes against budgets, age of the last review, families past a threshold, open

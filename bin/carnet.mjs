@@ -11,6 +11,8 @@ import { cheminEtat, ecrireEtat, noter } from '../lib/etat.mjs';
 import { ajouter, ajouterFamille, compter, lireFamilles, marquerRegle, rapportCompte } from '../lib/erreurs.mjs';
 import { enregistrer, marquerRevue, rapportSante, sante } from '../lib/sante.mjs';
 import { appliquer, planifier, rapportPlan, verifier } from '../lib/init.mjs';
+import { decouper, ecrire as ecrireDecoupage, rapport as rapportDecoupage } from '../lib/decouper.mjs';
+import { DEFAUTS } from '../lib/racine.mjs';
 
 const AIDE = `carnet <command>
 
@@ -28,6 +30,9 @@ const AIDE = `carnet <command>
   erreur famille <name> "<description>"             add a family (user's decision)
   sante [--json]         budgets, overdue review, families past a threshold
   revue [--notes <file>] record that a review happened today
+  decouper <file> --annee <YYYY> [--garder <n>] [--etat "Commitments,Questions"] [--sortie <new folder>]
+                         split an oversized state file into state and monthly journal;
+                         simulation unless --sortie; the source is never edited
 `;
 
 function lireTexte(source) {
@@ -67,6 +72,22 @@ function principal(argv) {
     if (!o.appliquer) return console.log('\nSimulation: nothing written. Run again with --appliquer to write this plan.');
     const ecrits = appliquer(plan);
     return console.log(`\nWritten: ${ecrits.length ? ecrits.join(', ') : 'nothing (already initialised)'}.`);
+  }
+
+  if (commande === 'decouper') {
+    // Works on any file, inside or outside an initialised project: it is how an old state file migrates.
+    const source = o._[0];
+    if (!source) throw new ErreurCarnet('Usage: carnet decouper <file> --annee <YYYY> [--garder <n>] [--sortie <new folder>]');
+    const annee = Number(o.annee);
+    const resultat = decouper(lireTexte(source), {
+      annee: Number.isInteger(annee) && annee > 1999 ? annee : NaN,
+      garder: Number(o.garder ?? 0),
+      sectionsEtat: typeof o.etat === 'string' ? o.etat.split(',').map((s) => s.trim()) : [],
+    });
+    console.log(rapportDecoupage(resultat, DEFAUTS.budgets.etat_octets));
+    if (typeof o.sortie !== 'string') return console.log('\nSimulation: nothing written. Add --sortie <new folder> to write the remainder and the journal there.');
+    const ecrits = ecrireDecoupage(resultat, o.sortie, source);
+    return console.log(`\nWritten (the source is untouched): ${ecrits.join(', ')}`);
   }
 
   if (commande === 'heure') {
