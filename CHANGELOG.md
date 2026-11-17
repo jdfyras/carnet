@@ -3,6 +3,21 @@
 Dates are YYYY-MM-DD. This file follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 loosely and [semantic versioning](https://semver.org/).
 
+## [0.3.0] - 2026-11-17
+
+### Added
+
+- Two plugins in this marketplace, under `plugins/`, installed with carnet as dependencies:
+  - `pilote` 0.1.0: skill `deleguer`, agents `planner`, `implementer`, `reviewer`, and the `pilote`
+    tool (contract validation, `codex exec` adapter with per-mode sandbox, deadline, declared
+    fallbacks, read-only tripwire, append-only journal, and an authorisation gate that refuses any
+    directory not authorised for Codex before Codex starts). 28 tests, each guard broken on purpose.
+  - `prompts` 0.1.0: skills `revoir-un-prompt` and `ecrire-un-prompt`, and a dated reference base
+    in French. Model-specific rules are re-read on the vendor's official page before being asserted.
+- `tests/public.test.mjs`: no machine path, member id, key, token or e-mail in a published file, no
+  quotation over 25 words in the reference base, and no term of a private deny list kept outside the
+  repository.
+
 ## [0.2.1] - 2026-11-16
 
 ### Fixed

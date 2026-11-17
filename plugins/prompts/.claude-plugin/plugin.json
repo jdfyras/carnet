@@ -1,0 +1,9 @@
+{
+  "name": "prompts",
+  "version": "0.1.0",
+  "description": "Prompt engineering with sources: review an existing prompt or agent instruction, or write a new one, re-reading model-specific rules on the vendor's official page, with a dated reference base.",
+  "author": {
+    "name": "Firas Jday"
+  },
+  "license": "MIT"
+}

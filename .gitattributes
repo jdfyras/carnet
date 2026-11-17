@@ -6,3 +6,5 @@
 *.yml text eol=lf
 bin/carnet text eol=lf
 bin/carnet.cmd text eol=crlf
+plugins/pilote/bin/pilote text eol=lf
+plugins/pilote/bin/pilote.cmd text eol=crlf

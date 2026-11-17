@@ -47,9 +47,15 @@ Claude Code, in one step (2.1.275 or later):
 claude plugin install carnet --marketplace jdfyras/carnet
 ```
 
-That one command also installs [`arbitrage`](https://github.com/jdfyras/arbitrage-skill), the
-decision skill `carnet-reprise` hands over to when something needs your choice: it is declared as a
-dependency of this plugin and listed in this marketplace, not copied here, so it has one source.
+That one command also installs three plugins declared as dependencies and listed in this
+marketplace:
+
+- [`arbitrage`](https://github.com/jdfyras/arbitrage-skill): the decision skill `carnet-reprise`
+  hands over to when something needs your choice;
+- [`pilote`](plugins/pilote/README.md): delegation under contract, to a planner, an implementer and a
+  reviewer subagent, or to the Codex CLI behind an authorisation gate;
+- [`prompts`](plugins/prompts/README.md): reviewing and writing prompts and agent instructions, with
+  model-specific rules re-read at the source.
 
 For a team, commit the plugin in the project's `.claude/settings.json` under `enabledPlugins`;
 each teammate then runs the same command once with `--scope project`.
@@ -63,7 +69,9 @@ npm link                          # puts `carnet` on the PATH; Node 20 or later,
 ```
 
 Plugin dependencies are a Claude Code mechanism. Outside it, install `arbitrage` from its own
-repository with its own `installer.sh`.
+repository with its own `installer.sh`. `pilote` and `prompts` are Claude Code plugins only for
+now: `installer.sh` does not copy them, and their skills expect the plugin layout (the `prompts`
+skills read `../../references/`, the `deleguer` skill expects `pilote` on the PATH).
 
 ## Use
 
@@ -84,6 +92,8 @@ Then, day to day:
 |---|---|---|
 | Starting a session, "where are we" | `carnet-reprise` | `carnet echeances` first, then the state, the last handover, `carnet sante` |
 | A decision to make | `arbitrage` (installed with carnet) | maps the decisions, then one at a time with options |
+| Handing work to another agent or to Codex | `pilote:deleguer` | `pilote contrat`, `pilote codex`, `pilote autoriser` |
+| Reviewing or writing a prompt, a skill, an AGENTS.md | `prompts:revoir-un-prompt`, `prompts:ecrire-un-prompt` | reads the official page of the target model |
 | Ending a session | `carnet-cloture` | `carnet etat <file>`, `carnet noter "<line>"`, `carnet budget` |
 | Something was corrected | `carnet-erreur` | `carnet erreur ajouter …`, then acts on the counts |
 | Setting up a project | `carnet-init` | `carnet init`, simulation first |
@@ -136,7 +146,8 @@ bin/carnet.mjs   lib/          the tool
 hooks/           hooks.json and the four hook scripts
 skills/          carnet-init, carnet-reprise, carnet-cloture, carnet-erreur
 gabarits/        what `init` writes
-tests/           node --test
+tests/           node --test, including public.test.mjs (nothing personal is published)
+plugins/pilote/  delegation plugin   plugins/prompts/  prompt engineering plugin
 ```
 
 Skill bodies are written once, in neutral terms, and copied as they are for every agent. Nothing

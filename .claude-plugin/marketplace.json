@@ -17,6 +17,16 @@
         "repo": "jdfyras/arbitrage-skill"
       },
       "description": "Decision support, installed with carnet: the decisions mapped, then one at a time with options, a visual for each, a recommendation and its counter-argument."
+    },
+    {
+      "name": "pilote",
+      "source": "./plugins/pilote",
+      "description": "Delegation under contract: planner, implementer and reviewer subagents, and the Codex CLI behind an authorisation gate, with the evidence verified by the coordinator."
+    },
+    {
+      "name": "prompts",
+      "source": "./plugins/prompts",
+      "description": "Prompt engineering with sources: review an existing prompt or agent instruction, or write a new one, re-reading model-specific rules on the vendor's official page."
     }
   ]
 }

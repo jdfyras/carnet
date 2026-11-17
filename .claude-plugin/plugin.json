@@ -1,13 +1,15 @@
 {
   "name": "carnet",
-  "version": "0.2.1",
-  "description": "A project notebook for work with AI agents: a bounded state file loaded at session start, deadlines read from it, a journal, a private error journal whose counts decide when a rule or a check is due, and guards. Installs the arbitrage decision skill with it.",
+  "version": "0.3.0",
+  "description": "A project notebook for work with AI agents: a bounded state file loaded at session start, deadlines read from it, a journal, a private error journal whose counts decide when a rule or a check is due, and guards. Installs with it: arbitrage (decisions), pilote (delegation to subagents and Codex) and prompts (prompt engineering with sources).",
   "author": {
     "name": "Firas Jday"
   },
   "license": "MIT",
   "dependencies": [
-    "arbitrage"
+    "arbitrage",
+    "pilote",
+    "prompts"
   ],
   "userConfig": {
     "gardes": {
