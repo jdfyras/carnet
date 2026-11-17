@@ -3,6 +3,19 @@
 Dates are YYYY-MM-DD. This file follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 loosely and [semantic versioning](https://semver.org/).
 
+## [0.3.1] - 2026-11-17
+
+### Security
+
+- pilote 0.1.1: `git` and `codex` are started from Node's own directory, with `-C` for the
+  working directory, never from the repository under review: on Windows a bare program name is
+  also looked up in the current directory, so a planted `git.exe` could have run instead of git.
+- pilote 0.1.1: Codex's final message goes through a private temporary directory removed after
+  the run, instead of a predictable name in the shared temporary folder.
+
+Both found by an automated security review after the push of 0.3.0; each fix has a test that fails
+when the flaw is put back.
+
 ## [0.3.0] - 2026-11-17
 
 ### Added

@@ -17,7 +17,7 @@ import path from 'node:path';
 
 import * as autorisations from './autorisations.mjs';
 import { DEFAULT_FALLBACK_ON, isCapacityFailure, modelChain, validateContract, validateExecutorConfig } from './contrat.mjs';
-import { filesChanged, newlyTouched } from './git.mjs';
+import { filesChanged, newlyTouched, TRUSTED_CWD } from './git.mjs';
 import { buildPrompt } from './prompt.mjs';
 import { deriveCodexStatus, readOnlyViolation, resultCore } from './resultat.mjs';
 
@@ -58,13 +58,19 @@ export function sandboxUsed(args) {
 }
 
 async function invoke(contract, model, workdir, timeoutSec, codex) {
-  const lastMsg = path.join(os.tmpdir(), `pilote-codex-${process.pid}-${Date.now()}.txt`);
+  // A private directory (created with mode 0700, unpredictable name) for the final message: a fixed
+  // name in the shared temporary folder could be created or read by another local user first.
+  const privateDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pilote-'));
+  const lastMsg = path.join(privateDir, 'last-message.txt');
   const args = buildArgs(contract, model, workdir, lastMsg, codex.pre);
   const started = Date.now();
   let child;
   try {
-    child = spawn(codex.cmd, args, { cwd: workdir, shell: false, stdio: ['ignore', 'pipe', 'pipe'] });
+    // Started from a trusted directory, never from the workdir: `-C` gives Codex its working
+    // directory, and a bare `codex` must not be looked up in a repository under review (Windows).
+    child = spawn(codex.cmd, args, { cwd: TRUSTED_CWD, shell: false, stdio: ['ignore', 'pipe', 'pipe'] });
   } catch (e) {
+    fs.rmSync(privateDir, { recursive: true, force: true });
     return { model, status: 'failed', response: '', killed: false, hardKilled: false, code: null, sandbox: sandboxUsed(args),
       usage: null, notices: [], commands: [], error_text: e.message, haystack: e.message, stderr: [e.message], wall_seconds: 0 };
   }
@@ -96,7 +102,7 @@ async function invoke(contract, model, workdir, timeoutSec, codex) {
 
   let response = '';
   try { response = fs.readFileSync(lastMsg, 'utf8'); } catch { /* not written on failure */ } finally {
-    try { fs.unlinkSync(lastMsg); } catch { /* best effort */ }
+    fs.rmSync(privateDir, { recursive: true, force: true });
   }
   const errorText = failed ? JSON.stringify(failed.error ?? failed) : (code === null ? err.trim() : '');
   return {

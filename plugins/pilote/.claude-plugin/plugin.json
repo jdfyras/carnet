@@ -1,6 +1,6 @@
 {
   "name": "pilote",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Delegation under contract: a planner, an implementer and a reviewer as subagents, and the Codex CLI behind an authorisation gate, with the evidence verified by the coordinator, never taken on trust.",
   "author": {
     "name": "Firas Jday"

@@ -301,6 +301,26 @@ test('run: a completed review, read-only sandbox passed, notices kept, commands 
   assert.match(args.at(-1), /=== TASK FRAME/);
 }));
 
+test('run: the final message goes through a private directory that is removed afterwards', () => avecFaux('ok', async ({ dir, argsFile }) => {
+  await run(contrat({ workdir: dir }), { registry: autorise(dir), codex: codexFaux });
+  const args = JSON.parse(fs.readFileSync(argsFile, 'utf8').trim());
+  const out = args[args.indexOf('-o') + 1];
+  assert.notEqual(path.dirname(out), os.tmpdir(), 'not a predictable name in the shared temporary folder');
+  assert.match(path.basename(path.dirname(out)), /^pilote-/);
+  assert.equal(fs.existsSync(path.dirname(out)), false, 'the private directory is removed');
+}));
+
+test('processes start from a trusted directory, never from the repository under review', () => {
+  // On Windows a bare program name is also looked up in the current directory: a `git.exe` or
+  // `codex.exe` planted in a reviewed repository must never be the one that runs.
+  for (const f of ['git.mjs', 'codex.mjs']) {
+    const src = fs.readFileSync(path.join(ICI, '..', 'lib', f), 'utf8');
+    for (const m of src.matchAll(/spawn(?:Sync)?\([^;]*?\{([^}]*)\}/g)) {
+      assert.match(m[1], /cwd: TRUSTED_CWD/, `${f}: every spawn starts from TRUSTED_CWD`);
+    }
+  }
+});
+
 test('run: a review that wrote a file is violated, not completed, and exits non-zero', () => avecFaux('ecrit', async ({ dir, base }) => {
   const r = await run(contrat({ workdir: dir, base_commit: base }), { registry: autorise(dir), codex: codexFaux });
   assert.equal(r.status, 'violated');

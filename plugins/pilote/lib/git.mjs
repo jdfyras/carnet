@@ -119,8 +119,15 @@ export function newlyTouched(before, after) {
   return [...new Set([...appeared, ...rewritten, ...vanished])];
 }
 
+/**
+ * A directory that is not the repository under review, to start processes from. On Windows a bare
+ * program name is also looked up in the current directory: started from a repository being reviewed,
+ * a planted `git.exe` there would run instead of git. Node's own directory is trusted by definition.
+ */
+export const TRUSTED_CWD = path.dirname(process.execPath);
+
 function git(dir, args) {
-  const r = spawnSync('git', args, { cwd: dir, encoding: 'utf8', shell: false });
+  const r = spawnSync('git', ['-C', String(dir), ...args], { cwd: TRUSTED_CWD, encoding: 'utf8', shell: false });
   return r.status === 0 ? r.stdout : null;
 }
 
